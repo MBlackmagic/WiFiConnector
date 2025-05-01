@@ -28,7 +28,7 @@ ESP8266, ESP32
 // имя AP, пароль AP, таймаут в секундах, отключать AP при успешном подключении к STA (иначе AP_STA)
 WiFiConnectorClass(const String& APname = "ESP AP",
                     const String& APpass = "",
-                    uint16_t timeout = 60,
+                    uint16_t timeout = 60 * 3,
                     bool closeAP = true);
 
 // установить имя AP
