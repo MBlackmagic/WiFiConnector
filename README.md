@@ -37,7 +37,7 @@ void setName(const String& name);
 // установить пароль AP
 void setPass(const String& pass);
 
-// установить таймаут в секундах
+// установить таймаут подключения в секундах. 0 - отключить таймаут
 void setTimeout(uint16_t timeout);
 
 // автоматически отключать AP при подключении к STA (умолч. вкл)
