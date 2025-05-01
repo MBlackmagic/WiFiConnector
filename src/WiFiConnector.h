@@ -30,7 +30,7 @@ class WiFiConnectorClass {
         _APpass = pass;
     }
 
-    // установить таймаут в секундах
+    // установить таймаут в секундах. 0 - отключить таймаут
     void setTimeout(uint16_t timeout) {
         _tout = timeout * 1000ul;
     }
@@ -79,7 +79,7 @@ class WiFiConnectorClass {
                 if (_closeAP) WiFi.softAPdisconnect(true);
                 return 1;
 
-            } else if (millis() - _tmr >= _tout) {
+            } else if (_tout && millis() - _tmr >= _tout) {
                 _tryConnect = false;
                 WiFi.disconnect();
                 WiFi.mode(WIFI_AP);
