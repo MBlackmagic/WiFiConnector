@@ -88,7 +88,21 @@ class WiFiConnectorClass {
                 return 1;
             }
         }
-        return 0;
+        else if (WiFi.getMode() == WIFI_AP && !_tryConnect && _apIdleTimeout) {
+        if (WiFi.softAPgetStationNum() == 0 && millis() - _apStartTime >= _apIdleTimeout) {
+            WiFi.softAPdisconnect(true);
+            delay(1000);  // Stabilisierung
+            WiFi.mode(WIFI_AP_STA);
+            WiFi.begin();  // Letzter gespeicherter SSID/Pass
+            _tryConnect = true;
+            _tmr = millis();
+            return true;
+        } else if (WiFi.softAPgetStationNum() > 0) {
+            // Reset timer bei Aktivität
+            _apStartTime = millis();
+        }
+    }
+    return false;
     }
 
     // состояние подключения. true - подключен, false - запущена АР
@@ -112,11 +126,15 @@ class WiFiConnectorClass {
     bool _closeAP = false;
     bool _tryConnect = false;
 
+    uint32_t _apStartTime = 0; 
+    uint32_t _apIdleTimeout = 60000;  // 60 second AP Timeout
+
     ConnectorCallback _conn_cb = nullptr;
     ConnectorCallback _err_cb = nullptr;
 
     void _startAP() {
         WiFi.softAP(_APname.c_str(), _APpass.c_str());
+        _apStartTime = millis(); 
     }
 };
 
